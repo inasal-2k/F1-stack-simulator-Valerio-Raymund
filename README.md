@@ -1,5 +1,13 @@
 # Flask Stack Simulator startup template
 
+## Student and activity
+
+- Name: Raymund Castillano Valerio
+- Section: BSIT-WMT-4-2
+- Original starter repository: https://github.com/Jackson-Soriano/f1-elec4-stack-simulator-starter
+
+This repository is for the Week 11 pre-demo reading activity. It explores how a Python Flask application connects a stack model to an HTML interface, with CSS, Bootstrap, JavaScript, and jQuery supporting the interface. The TODOs are intentionally left for the demonstration.
+
 This is the unfinished repository for a pre-demo reading activity. Read `Flask_PreDemo_Reading_Activity.pdf` first. 
 
 ## Before the demonstration
@@ -23,5 +31,3 @@ This is the unfinished repository for a pre-demo reading activity. Read `Flask_P
 - requirements.txt: Flask dependency only.
 
 During the demo, the instructor will convert static paths into url_for calls, connect form submission, introduce Jinja variables and loops, and connect Python stack operations. The three HTML files are intentionally independent before that conversion.
-
-
