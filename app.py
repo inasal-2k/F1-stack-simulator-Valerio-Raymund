@@ -1,44 +1,87 @@
-"""Flask Stack Simulator starter: complete TODOs during the live demo.
-Before class, preview templates/index.html directly in the browser.
-Running this file starts a status page, not the completed simulator.
-"""
-from flask import Flask
+import os
+import secrets
 
-# TODO P1: Extend the imports with render_template, request, redirect,
-# url_for, session, and flash. Import secrets and the completed Stack class.
+from flask import Flask, flash, redirect, render_template, request, session, url_for
+
+from stack_model import Stack
+
+
 app = Flask(__name__)
-# TODO P2: Set SECRET_KEY for the session and flash messages.
-# This lesson uses short fictional stack values on localhost.
+app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY") or secrets.token_hex(32)
 
 
-@app.route('/')
+@app.route("/")
 def index():
-    # TODO P3: Replace this temporary response with render_template.
-    # Start by displaying the static index.html through Flask.
-    # TODO P6: Restore stack values from session, reverse for display,
-    # and pass items, size, popped, and highlight to the template.
-    return '<h1>Starter ready</h1><p>Complete the TODOs during the demo.</p>'
+    stack = Stack(session.get("items", []))
+    items = list(reversed(stack.items))
+
+    return render_template(
+        "index.html",
+        items=items,
+        size=stack.size(),
+        popped=session.get("popped", []),
+        highlight=request.args.get("peek") == "1",
+    )
 
 
-@app.route('/stack', methods=['POST'])
+@app.route("/stack", methods=["POST"])
 def operate():
-    # TODO P4: Read action and value from request.form. Strip the value.
-    # TODO P7: Restore the Stack and removed-item history from session.
-    # TODO P8: Implement Push, Pop, Peek, and Clear with feedback.
-    # Push accepts 1-24 characters and at most 20 current items.
-    # Pop and Peek must handle an empty stack. Clear resets both lists.
-    # Keep only the 20 most recently removed values.
-    # TODO P9: Reassign session values, then redirect to the index route.
-    # Use a peek flag when highlighting the top item.
-    return 'TODO: stack operations will be completed during the demo.', 501
+    action = request.form.get("action", "").strip().lower()
+    value = request.form.get("value", "").strip()
+
+    stack = Stack(session.get("items", []))
+    popped = session.get("popped", [])
+    highlight = False
+
+    if action == "push":
+        if not value:
+            flash("Enter a value before pushing it onto the stack.", "error")
+        elif len(value) > 24:
+            flash("Values must be 24 characters or fewer.", "error")
+        elif stack.size() >= 20:
+            flash("The stack can hold up to 20 items.", "error")
+        else:
+            stack.push(value)
+            flash(f"Pushed {value} onto the stack.", "success")
+
+    elif action == "pop":
+        removed = stack.pop()
+        if removed is None:
+            flash("The stack is empty; there is nothing to pop.", "error")
+        else:
+            popped.insert(0, removed)
+            popped = popped[:20]
+            flash(f"Popped {removed} from the stack.", "success")
+
+    elif action == "peek":
+        top = stack.peek()
+        if top is None:
+            flash("The stack is empty; there is nothing to peek at.", "error")
+        else:
+            highlight = True
+            flash(f"The top item is {top}.", "success")
+
+    elif action == "clear":
+        stack.clear()
+        popped = []
+        flash("The stack and removed-item history have been cleared.", "success")
+
+    else:
+        flash("Unknown operation.", "error")
+
+    session["items"] = stack.items
+    session["popped"] = popped
+
+    if highlight:
+        return redirect(url_for("index", peek="1"))
+
+    return redirect(url_for("index"))
 
 
-@app.route('/contact')
+@app.route("/contact")
 def contact():
-    # TODO P5: Render contact.html as a placeholder landing page.
-    # A validated contact form belongs to a later lesson.
-    return 'TODO: connect the contact placeholder during the demo.', 501
+    return render_template("contact.html")
 
 
-if __name__ == '__main__':
-    app.run()  # Local development only. Stop with Ctrl+C.
+if __name__ == "__main__":
+    app.run()
