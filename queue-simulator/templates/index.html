@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Queue Simulator{% endblock %}
+
+{% block content %}
+<h1>Queue Data Structure Simulator</h1>
+<p>A queue follows First In, First Out (FIFO): the first item enqueued is the first item dequeued.</p>
+<p>Queue size: <strong>{{ size }}</strong> / 20</p>
+
+<div class="row simulator">
+  <section class="col-md-4 operations">
+    <h2>Operations</h2>
+    <form action="{{ url_for('operate') }}" method="POST">
+      <label for="queue_data">Data (1 to 24 characters)</label>
+      <input
+        id="queue_data"
+        name="value"
+        maxlength="24"
+        class="form-control mb-2"
+        autocomplete="off"
+      >
+
+      <div class="d-grid gap-2">
+        <button type="submit" name="action" value="enqueue" class="btn btn-success">Enqueue</button>
+        <button type="submit" name="action" value="dequeue" class="btn btn-danger">Dequeue</button>
+        <button type="submit" name="action" value="peek" class="btn btn-warning">Peek</button>
+        <button type="submit" name="action" value="clear" class="btn btn-light">Clear</button>
+      </div>
+    </form>
+  </section>
+
+  <section id="queue" class="col-md-4 stack-area">
+    <h2>Queue data</h2>
+    {% if items %}
+      {% for item in items %}
+        <div class="stack-item{% if loop.first and highlight %} peek{% endif %}">
+          {{ item }}
+          {% if loop.first and loop.last %}
+            <small>FRONT / REAR</small>
+          {% elif loop.first %}
+            <small>FRONT</small>
+          {% elif loop.last %}
+            <small>REAR</small>
+          {% endif %}
+        </div>
+      {% endfor %}
+    {% else %}
+      <p>The queue is empty.</p>
+    {% endif %}
+  </section>
+
+  <section id="dequeued" class="col-md-4 popped-area">
+    <h2>Removed from queue</h2>
+    {% if removed %}
+      {% for item in removed %}
+        <div class="stack-item removed">{{ item }}</div>
+      {% endfor %}
+    {% else %}
+      <p>No removed items.</p>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}
