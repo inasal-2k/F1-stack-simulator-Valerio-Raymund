@@ -1,33 +1,20 @@
-# Flask Stack Simulator startup template
+# Flask Stack and Queue Simulators
 
-## Student and activity
+**Name:** Raymund Castillano Valerio  
+**Section:** BSIT-WMT-4-2
 
-- Name: Raymund Castillano Valerio
-- Section: BSIT-WMT-4-2
-- Original starter repository: https://github.com/Jackson-Soriano/f1-elec4-stack-simulator-starter
+This repository contains two Flask applications: a Stack Simulator demonstrating LIFO (Last In, First Out), and a Queue Simulator demonstrating FIFO (First In, First Out).
 
-This repository is for the Week 11 pre-demo reading activity. It explores how a Python Flask application connects a stack model to an HTML interface, with CSS, Bootstrap, JavaScript, and jQuery supporting the interface. The TODOs are intentionally left for the demonstration.
+## Requirements
 
-This is the unfinished repository for a pre-demo reading activity. Read `Flask_PreDemo_Reading_Activity.pdf` first. 
+- Python 3.9 or newer
+- Flask
 
-## Before the demonstration
+## Setup
 
-1. Clone the repository URL supplied by your instructor.
-2. Open the cloned folder in VS Code.
-3. Open `templates/index.html` directly in a browser. This is a static preview.
-4. Click through the navigation to the contact placeholder.
-5. Read the HTML comments, app.py TODOs, and stack_model.py TODOs.
-6. Answer the reading worksheet. Do not complete the TODOs before the demonstration.
+From the repository root, create and activate a virtual environment, then install the dependencies:
 
-## Files
-
-- app.py: Flask setup and route TODOs P1-P9.
-- stack_model.py: Stack method.
-- templates/index.html: standalone static simulator preview.
-- templates/contact.html: standalone placeholder page.
-- templates/base.html: standalone layout reference; inheritance is not active yet.
-- static/css/style.css: supplied appearance adapted for this preview.
-- static/js/ui.js: optional focus enhancement and a later effect TODO.
-- requirements.txt: Flask dependency only.
-
-During the demo, the instructor will convert static paths into url_for calls, connect form submission, introduce Jinja variables and loops, and connect Python stack operations. The three HTML files are intentionally independent before that conversion.
+```powershell
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
